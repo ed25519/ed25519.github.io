@@ -1,10 +1,30 @@
 <html>
 <head>
+<script src="js/nacl-fast.min.js"></script>
+<script>
+function initSite() {
+	console.log("init");
+	console.log(nacl.box.keyPair());
+}
+
+// facade01 -- create new keypair, show hex secret + public without seed
+function facade01() {
+}
+// facade02 -- create keypair, show hex secret + public with seed
+function facade02(seed) {
+}
+// facade03 -- create keypair from secret (may need masking!)
+function facade03(secret) {
+}
+// facade04 -- sign message (message, secret key, public key) or (message, seed)
+// facade05 -- verify signature (message, signature)
+// facade06 -- detect key type, decode
+</script>
 <title>
 ed25519
 </title>
 </head>
-<body>
+<body onload="initSite()">
 <h2>ed25519</h2>
 </body>
 </html>
