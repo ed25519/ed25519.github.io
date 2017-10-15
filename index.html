@@ -1,10 +1,13 @@
 <html>
 <head>
 <script src="js/nacl-fast.min.js"></script>
+<script src="js/jquery-3.2.1.min.js"></script>
 <script>
 function initSite() {
 	console.log("init");
-	console.log(nacl.box.keyPair());
+	keyPair = nacl.box.keyPair();
+	console.log(keyPair);
+  updateCells("", keyPair.secretKey, keyPair.publicKey);
 }
 
 // facade01 -- create new keypair, show hex secret + public without seed
@@ -19,12 +22,94 @@ function facade03(secret) {
 // facade04 -- sign message (message, secret key, public key) or (message, seed)
 // facade05 -- verify signature (message, signature)
 // facade06 -- detect key type, decode
+
+function d2h(d) {
+	var s = (+d).toString(16);
+	if(s.length < 2) {
+        s = '0' + s;
+    }
+	return s;
+}
+
+function uint8Arr2S(ary) {
+  return new TextDecoder("utf-8").decode(ary);
+}
+
+function uint8Arr2HexArr(ary) {
+  return $.map(ary, function(d) { return d2h(d); });
+}
+
+function updateSeedCells() {
+  console.log("Fill this in");
+}
+
+function updatePKCells(pk) {
+  $("#pkhex").text(uint8Arr2HexArr(pk).join('  '));
+  $("#pkascii").text(uint8Arr2S(pk));
+}
+
+function updateSKCells(sk) {
+  $("#skinput").text(uint8Arr2HexArr(sk).join('  '));
+  $("#skascii").text(uint8Arr2S(sk));
+}
+
+function updateCells(seed,sk,pk) {
+  updateSeedCells();
+  updateSKCells(sk);
+  updatePKCells(pk);
+}
 </script>
+<style>
+  .hex {
+  }
+  td {
+    padding: 10px;
+  }
+  td.textdisplay {
+    width: 300px;
+    font-family: monospace;
+  }
+
+  textarea {
+	  height: 5em;	
+		width: 100%;
+    overflow: hidden;
+	}
+
+</style>
 <title>
 ed25519
 </title>
 </head>
 <body onload="initSite()">
-<h2>ed25519</h2>
-</body>
+  <h2>ed25519</h2>
+
+  <table>
+    <tr>
+      <th>type</td>
+      <th>hex</td>
+      <th>ascii</td>
+    </tr>
+    <tr>
+      <td id="seedlabel">seed</td>
+      <td class="hex textdisplay" id="seedhex">
+        <textarea id="seedinput"></textarea>
+      </td>
+      <td class="ascii textdisplay" id="seedascii"></td>
+    </tr>
+    <tr>
+      <td id="sklabel">secretKey</td>
+      <td class="hex textdisplay" id="skhex">
+        <textarea id="skinput"></textarea>
+      </td>
+      <td class="ascii textdisplay" id="skascii"></td>
+    </tr>
+    <tr>
+      <td id="pklabel">publicKey</td>
+      <td class="hex textdisplay" id="pkhex"></td>
+      <td class="ascii textdisplay" id="pkascii"></td>
+    </tr>
+  </table>
+
+  </body>
 </html>
